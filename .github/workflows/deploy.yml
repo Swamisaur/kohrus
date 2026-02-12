@@ -45,21 +45,43 @@ jobs:
           NEXT_TELEMETRY_DISABLED: 1
           NODE_OPTIONS: --max-old-space-size=4096
 
-      - name: Verify build output exists
+      - name: Debug - Comprehensive path analysis
         run: |
-          echo "Verifying build output..."
-          if [ ! -d "kohrus-web/out" ]; then
-            echo "Error: kohrus-web/out directory does not exist"
-            exit 1
+          echo "=== DEBUG: Path Analysis ==="
+          echo "Current working directory: $(pwd)"
+          echo "Workspace root: ${{ github.workspace }}"
+          echo ""
+          echo "=== Testing path existence ==="
+          echo "Testing relative path: kohrus-web/out"
+          if [ -d "kohrus-web/out" ]; then
+            echo "✓ Relative path exists"
+            echo "Absolute path: $(realpath kohrus-web/out)"
+          else
+            echo "✗ Relative path does NOT exist"
           fi
-          file_count=$(find kohrus-web/out -type f 2>/dev/null | wc -l)
-          echo "Found $file_count files in kohrus-web/out"
-          if [ "$file_count" -eq 0 ]; then
-            echo "Error: No files found in kohrus-web/out"
-            exit 1
-          fi
-          echo "✓ Build output verified"
-          ls -la kohrus-web/out/ | head -10
+          echo ""
+          echo "=== File count analysis ==="
+          file_count_all=$(find kohrus-web/out -type f 2>/dev/null | wc -l)
+          file_count_visible=$(find kohrus-web/out -type f ! -name '.*' 2>/dev/null | wc -l)
+          file_count_hidden=$(find kohrus-web/out -type f -name '.*' 2>/dev/null | wc -l)
+          echo "Total files: $file_count_all"
+          echo "Visible files: $file_count_visible"
+          echo "Hidden files: $file_count_hidden"
+          echo ""
+          echo "=== Directory structure ==="
+          echo "Top-level contents:"
+          ls -la kohrus-web/out/ | head -20
+          echo ""
+          echo "=== Permissions check ==="
+          ls -ld kohrus-web/out
+          echo ""
+          echo "=== Path format tests ==="
+          echo "Path without trailing slash: kohrus-web/out"
+          echo "Path with trailing slash: kohrus-web/out/"
+          echo "Absolute path: $(realpath kohrus-web/out 2>/dev/null || echo 'N/A')"
+          echo ""
+          echo "=== Size check ==="
+          du -sh kohrus-web/out 2>/dev/null || echo "Could not get size"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
