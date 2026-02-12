@@ -45,26 +45,13 @@ jobs:
           NEXT_TELEMETRY_DISABLED: 1
           NODE_OPTIONS: --max-old-space-size=4096
 
-      - name: Prepare deployment
-        run: |
-          echo "Checking build output..."
-          if [ ! -d "kohrus-web/out" ]; then
-            echo "Error: kohrus-web/out does not exist"
-            exit 1
-          fi
-          echo "Copying build output to root..."
-          rm -rf ./out
-          cp -r kohrus-web/out ./out
-          echo "✓ Build output copied"
-          ls -la out/ | head -10
-
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./out
+          path: kohrus-web/out
 
   deploy:
     environment:
