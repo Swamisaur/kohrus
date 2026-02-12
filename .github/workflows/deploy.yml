@@ -45,23 +45,14 @@ jobs:
           NEXT_TELEMETRY_DISABLED: 1
           NODE_OPTIONS: --max-old-space-size=4096
 
-      - name: Debug - Check build output
-        run: |
-          echo "Current directory: $(pwd)"
-          echo "Checking kohrus-web/out:"
-          ls -la kohrus-web/out/ | head -20 || echo "Directory not found"
-          echo "File count:"
-          find kohrus-web/out -type f 2>/dev/null | wc -l || echo "0"
-          echo "Directory exists check:"
-          test -d kohrus-web/out && echo "✓ Directory exists" || echo "✗ Directory does not exist"
-
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
+        working-directory: ./
         uses: actions/upload-pages-artifact@v3
         with:
-          path: kohrus-web/out
+          path: ./kohrus-web/out
 
   deploy:
     environment:
