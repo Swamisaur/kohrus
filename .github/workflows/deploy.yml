@@ -52,8 +52,7 @@ jobs:
             exit 1
           fi
           echo "✓ Build output exists"
-          file_count=$(find kohrus-web/out -type f | wc -l)
-          echo "Files found: $file_count"
+          ls -la kohrus-web/out/ | head -5
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
