@@ -36,7 +36,10 @@ jobs:
 
       - name: Build
         working-directory: ./kohrus-web
-        run: npm run build
+        run: |
+          echo "Starting build..."
+          npm run build 2>&1 | tee build.log || (echo "Build failed!" && cat build.log && exit 1)
+          echo "Build completed successfully!"
         env:
           CI: false
           NEXT_TELEMETRY_DISABLED: 1
