@@ -51,13 +51,24 @@ jobs:
           NODE_OPTIONS: --max-old-space-size=4096
 
 
+      - name: Verify build output
+        working-directory: ./kohrus-web
+        run: |
+          if [ ! -d "out" ]; then
+            echo "Error: out directory not found"
+            exit 1
+          fi
+          echo "Build output verified:"
+          ls -la out/ | head -10
+          echo "Total files: $(find out -type f | wc -l)"
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'kohrus-web/out'
+          path: './kohrus-web/out'
 
   deploy:
     environment:
