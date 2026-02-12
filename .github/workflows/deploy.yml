@@ -45,16 +45,15 @@ jobs:
           NEXT_TELEMETRY_DISABLED: 1
           NODE_OPTIONS: --max-old-space-size=4096
 
-      - name: Copy build output to root
+      - name: Verify build output
         run: |
-          if [ -d "kohrus-web/out" ]; then
-            cp -r kohrus-web/out ./out || exit 1
-            echo "✓ Build output copied to root"
-            ls -la out/ | head -10
-          else
+          if [ ! -d "kohrus-web/out" ]; then
             echo "Error: kohrus-web/out directory not found"
             exit 1
           fi
+          echo "✓ Build output exists"
+          file_count=$(find kohrus-web/out -type f | wc -l)
+          echo "Files found: $file_count"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -62,7 +61,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./out
+          path: kohrus-web/out
 
   deploy:
     environment:
