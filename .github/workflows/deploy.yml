@@ -36,34 +36,10 @@ jobs:
 
       - name: Build
         working-directory: ./kohrus-web
-        run: |
-          echo "Starting build..."
-          npm run build 2>&1 | tee build.log
-          if [ $? -ne 0 ]; then
-            echo "Build failed. Log contents:"
-            cat build.log
-            exit 1
-          fi
-          echo "Build succeeded!"
+        run: npm run build
         env:
           CI: false
           NEXT_TELEMETRY_DISABLED: 1
-          NODE_OPTIONS: --max-old-space-size=4096
-
-
-      - name: Prepare deployment
-        run: |
-          if [ ! -d "kohrus-web/out" ]; then
-            echo "Error: kohrus-web/out does not exist"
-            exit 1
-          fi
-          echo "✓ Build output exists"
-          file_count=$(find kohrus-web/out -type f | wc -l)
-          echo "Files found: $file_count"
-          if [ "$file_count" -eq 0 ]; then
-            echo "Error: No files found in kohrus-web/out"
-            exit 1
-          fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -71,7 +47,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: kohrus-web/out
+          path: ./kohrus-web/out
 
   deploy:
     environment:
