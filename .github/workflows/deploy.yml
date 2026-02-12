@@ -47,8 +47,14 @@ jobs:
 
       - name: Prepare deployment
         run: |
+          echo "Checking build output..."
+          if [ ! -d "kohrus-web/out" ]; then
+            echo "Error: kohrus-web/out does not exist"
+            exit 1
+          fi
           echo "Copying build output to root..."
-          cp -r kohrus-web/out ./out || (echo "Copy failed!" && exit 1)
+          mkdir -p ./out
+          cp -r kohrus-web/out/* ./out/ || (echo "Copy failed!" && exit 1)
           echo "✓ Build output copied"
           ls -la out/ | head -10
 
