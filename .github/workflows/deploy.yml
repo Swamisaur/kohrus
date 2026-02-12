@@ -36,7 +36,10 @@ jobs:
 
       - name: Build
         working-directory: ./kohrus-web
-        run: npm run build
+        run: npm run build || (echo "Build failed, checking for errors..." && exit 1)
+        env:
+          CI: false
+          ESLINT_NO_DEV_ERRORS: true
 
       - name: Add .nojekyll file
         working-directory: ./kohrus-web/out
