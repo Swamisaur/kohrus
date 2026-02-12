@@ -53,8 +53,8 @@ jobs:
             exit 1
           fi
           echo "Copying build output to root..."
-          mkdir -p ./out
-          cp -r kohrus-web/out/* ./out/ || (echo "Copy failed!" && exit 1)
+          rm -rf ./out
+          cp -r kohrus-web/out ./out
           echo "✓ Build output copied"
           ls -la out/ | head -10
 
