@@ -51,8 +51,15 @@ jobs:
           NODE_OPTIONS: --max-old-space-size=4096
 
       - name: Add .nojekyll file
-        working-directory: ./kohrus-web/out
-        run: touch .nojekyll
+        working-directory: ./kohrus-web
+        run: |
+          if [ -d "out" ]; then
+            touch out/.nojekyll
+            echo ".nojekyll file created"
+          else
+            echo "Error: out directory not found"
+            exit 1
+          fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
