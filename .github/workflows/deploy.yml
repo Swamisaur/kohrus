@@ -36,10 +36,19 @@ jobs:
 
       - name: Build
         working-directory: ./kohrus-web
-        run: npm run build
+        run: |
+          echo "Starting build..."
+          npm run build 2>&1 | tee build.log
+          if [ $? -ne 0 ]; then
+            echo "Build failed. Log contents:"
+            cat build.log
+            exit 1
+          fi
+          echo "Build succeeded!"
         env:
           CI: false
           NEXT_TELEMETRY_DISABLED: 1
+          NODE_OPTIONS: --max-old-space-size=4096
 
       - name: Add .nojekyll file
         working-directory: ./kohrus-web/out

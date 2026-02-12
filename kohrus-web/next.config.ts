@@ -7,9 +7,11 @@ const nextConfig: NextConfig = {
     unoptimized: true,
   },
   trailingSlash: true,
-  // @ts-ignore - eslint config for build
   eslint: {
     ignoreDuringBuilds: true,
+  } as any,
+  typescript: {
+    ignoreBuildErrors: false,
   },
 };
 
