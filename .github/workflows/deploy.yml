@@ -51,23 +51,6 @@ jobs:
           NODE_OPTIONS: --max-old-space-size=4096
 
 
-      - name: Verify build output
-        run: |
-          echo "Current directory: $(pwd)"
-          echo "Checking for build output..."
-          if [ -d "kohrus-web/out" ]; then
-            echo "✓ Build output found at kohrus-web/out"
-            echo "Contents:"
-            ls -la kohrus-web/out/ | head -10
-            echo "Total files: $(find kohrus-web/out -type f | wc -l)"
-            echo "Directory size: $(du -sh kohrus-web/out | cut -f1)"
-          else
-            echo "✗ Error: kohrus-web/out directory not found"
-            echo "Listing kohrus-web directory:"
-            ls -la kohrus-web/ || echo "kohrus-web directory doesn't exist"
-            exit 1
-          fi
-
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
