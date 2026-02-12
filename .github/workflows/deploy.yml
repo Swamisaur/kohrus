@@ -45,14 +45,20 @@ jobs:
           NEXT_TELEMETRY_DISABLED: 1
           NODE_OPTIONS: --max-old-space-size=4096
 
+      - name: Prepare deployment
+        run: |
+          echo "Copying build output to root..."
+          cp -r kohrus-web/out ./out || (echo "Copy failed!" && exit 1)
+          echo "✓ Build output copied"
+          ls -la out/ | head -10
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
-        working-directory: ./
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./kohrus-web/out
+          path: ./out
 
   deploy:
     environment:
