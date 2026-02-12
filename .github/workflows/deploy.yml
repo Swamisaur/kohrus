@@ -57,7 +57,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './kohrus-web/out'
+          path: 'kohrus-web/out'
 
   deploy:
     environment:
