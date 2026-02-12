@@ -45,15 +45,6 @@ jobs:
           NEXT_TELEMETRY_DISABLED: 1
           NODE_OPTIONS: --max-old-space-size=4096
 
-      - name: Verify build output
-        run: |
-          if [ ! -d "kohrus-web/out" ]; then
-            echo "Error: kohrus-web/out directory not found"
-            exit 1
-          fi
-          echo "✓ Build output exists"
-          ls -la kohrus-web/out/ | head -5
-
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
