@@ -51,13 +51,23 @@ jobs:
           NODE_OPTIONS: --max-old-space-size=4096
 
 
+      - name: Verify artifact path exists
+        run: |
+          if [ ! -d "kohrus-web/out" ]; then
+            echo "Error: kohrus-web/out does not exist"
+            exit 1
+          fi
+          echo "✓ Artifact directory exists"
+          echo "Files in out directory:"
+          ls -la kohrus-web/out/ | head -10
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: kohrus-web/out
+          path: ${{ github.workspace }}/kohrus-web/out
 
   deploy:
     environment:
