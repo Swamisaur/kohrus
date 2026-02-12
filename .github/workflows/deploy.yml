@@ -47,8 +47,14 @@ jobs:
 
       - name: Copy build output to root
         run: |
-          cp -r kohrus-web/out ./out
-          ls -la out/ | head -10
+          if [ -d "kohrus-web/out" ]; then
+            cp -r kohrus-web/out ./out || exit 1
+            echo "✓ Build output copied to root"
+            ls -la out/ | head -10
+          else
+            echo "Error: kohrus-web/out directory not found"
+            exit 1
+          fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
