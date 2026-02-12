@@ -51,13 +51,20 @@ jobs:
           NODE_OPTIONS: --max-old-space-size=4096
 
 
+      - name: List build output
+        run: |
+          echo "Current directory: $(pwd)"
+          echo "Checking kohrus-web/out:"
+          ls -la kohrus-web/out/ 2>&1 | head -20 || echo "Directory not found"
+          echo "File count: $(find kohrus-web/out -type f 2>/dev/null | wc -l || echo 0)"
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: kohrus-web/out
+          path: ./kohrus-web/out
 
   deploy:
     environment:
