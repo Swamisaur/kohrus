@@ -51,21 +51,19 @@ jobs:
           NODE_OPTIONS: --max-old-space-size=4096
 
 
-      - name: Verify artifact path exists
+      - name: Prepare deployment
         run: |
           if [ ! -d "kohrus-web/out" ]; then
             echo "Error: kohrus-web/out does not exist"
             exit 1
           fi
-          echo "✓ Artifact directory exists"
+          echo "✓ Build output exists"
           file_count=$(find kohrus-web/out -type f | wc -l)
           echo "Files found: $file_count"
           if [ "$file_count" -eq 0 ]; then
             echo "Error: No files found in kohrus-web/out"
             exit 1
           fi
-          echo "Sample files:"
-          ls -la kohrus-web/out/ | head -10
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -73,7 +71,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: kohrus-web/out/
+          path: kohrus-web/out
 
   deploy:
     environment:
