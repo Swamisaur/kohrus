@@ -47,6 +47,7 @@ jobs:
 
       - name: Debug - Comprehensive path analysis
         run: |
+          set -e
           echo "=== DEBUG: Path Analysis ==="
           echo "Current working directory: $(pwd)"
           echo "Workspace root: ${{ github.workspace }}"
@@ -59,13 +60,15 @@ jobs:
             echo "Absolute path: $ABS_PATH"
           else
             echo "✗ Relative path does NOT exist"
+            echo "Listing kohrus-web directory:"
+            ls -la kohrus-web/ || true
             exit 1
           fi
           echo ""
           echo "=== File count analysis ==="
-          file_count_all=$(find kohrus-web/out -type f 2>/dev/null | wc -l)
-          file_count_visible=$(find kohrus-web/out -type f ! -name '.*' 2>/dev/null | wc -l)
-          file_count_hidden=$(find kohrus-web/out -type f -name '.*' 2>/dev/null | wc -l)
+          file_count_all=$(find kohrus-web/out -type f 2>/dev/null | wc -l || echo "0")
+          file_count_visible=$(find kohrus-web/out -type f ! -name '.*' 2>/dev/null | wc -l || echo "0")
+          file_count_hidden=$(find kohrus-web/out -type f -name '.*' 2>/dev/null | wc -l || echo "0")
           echo "Total files: $file_count_all"
           echo "Visible files: $file_count_visible"
           echo "Hidden files: $file_count_hidden"
