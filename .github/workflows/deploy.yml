@@ -40,6 +40,17 @@ jobs:
           echo "Starting build..."
           npm run build 2>&1 | tee build.log || (echo "Build failed!" && cat build.log && exit 1)
           echo "Build completed successfully!"
+          echo "Checking build output location..."
+          echo "Current directory: $(pwd)"
+          echo "Contents of current directory:"
+          ls -la
+          echo "Checking for out directory:"
+          if [ -d "out" ]; then
+            echo "✓ out directory exists in kohrus-web"
+            ls -la out/ | head -10
+          else
+            echo "✗ out directory NOT found in kohrus-web"
+          fi
         env:
           CI: false
           NEXT_TELEMETRY_DISABLED: 1
