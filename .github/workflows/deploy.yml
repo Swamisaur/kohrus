@@ -37,109 +37,114 @@ jobs:
       - name: Build
         working-directory: ./kohrus-web
         run: |
-          echo "Starting build..."
-          npm run build 2>&1 | tee build.log || (echo "Build failed!" && cat build.log && exit 1)
-          echo "Build completed successfully!"
-          echo "Checking build output location..."
+          echo "=== Build Step ==="
           echo "Current directory: $(pwd)"
-          echo "Contents of current directory:"
-          ls -la
-          echo "Checking for out directory:"
-          if [ -d "out" ]; then
-            echo "✓ out directory exists in kohrus-web"
-            ls -la out/ | head -10
-          else
-            echo "✗ out directory NOT found in kohrus-web"
-          fi
-        env:
-          CI: false
-          NEXT_TELEMETRY_DISABLED: 1
-          NODE_OPTIONS: --max-old-space-size=4096
-
-      - name: Debug - Comprehensive path analysis
-        run: |
-          echo "=== DEBUG: Path Analysis ==="
-          echo "Current working directory: $(pwd)"
           echo "Workspace root: ${{ github.workspace }}"
           echo ""
-          echo "=== Testing path existence ==="
-          echo "Testing relative path: kohrus-web/out"
-          if [ -d "kohrus-web/out" ]; then
-            echo "✓ Relative path exists"
-            ABS_PATH=$(cd kohrus-web/out && pwd)
-            echo "Absolute path: $ABS_PATH"
+          echo "Starting Next.js build..."
+          npm run build 2>&1 | tee build.log || {
+            echo "✗ Build failed!"
+            cat build.log
+            exit 1
+          }
+          echo ""
+          echo "✓ Build command completed"
+          echo ""
+          echo "=== Verifying build output ==="
+          echo "Current directory: $(pwd)"
+          echo "Listing current directory contents:"
+          ls -la
+          echo ""
+          if [ ! -d "out" ]; then
+            echo "✗ CRITICAL ERROR: 'out' directory was NOT created by Next.js build!"
+            echo "This means the static export failed."
             echo ""
-            echo "=== File count analysis ==="
-            file_count_all=$(find kohrus-web/out -type f 2>/dev/null | wc -l || echo "0")
-            file_count_visible=$(find kohrus-web/out -type f ! -name '.*' 2>/dev/null | wc -l || echo "0")
-            file_count_hidden=$(find kohrus-web/out -type f -name '.*' 2>/dev/null | wc -l || echo "0")
-            echo "Total files: $file_count_all"
-            echo "Visible files: $file_count_visible"
-            echo "Hidden files: $file_count_hidden"
-            if [ "$file_count_all" -eq 0 ]; then
-              echo "WARNING: No files found!"
-            fi
+            echo "Checking for .next directory:"
+            ls -la .next/ 2>/dev/null || echo ".next directory not found"
             echo ""
-            echo "=== Directory structure ==="
-            echo "Top-level contents:"
-            ls -la kohrus-web/out/ | head -20 || echo "ls failed"
-            echo ""
-            echo "=== Permissions check ==="
-            ls -ld kohrus-web/out || echo "Permission check failed"
-            echo ""
-            echo "=== Size check ==="
-            du -sh kohrus-web/out 2>/dev/null || echo "Could not get size"
-            echo ""
-            echo "=== Final verification ==="
-            echo "Directory exists: YES"
-            echo "Directory is readable: $([ -r "kohrus-web/out" ] && echo 'YES' || echo 'NO')"
-            echo "Directory is executable: $([ -x "kohrus-web/out" ] && echo 'YES' || echo 'NO')"
-          else
-            echo "✗ Relative path does NOT exist"
-            echo "Listing kohrus-web directory:"
-            ls -la kohrus-web/ || echo "Could not list kohrus-web directory"
-            echo ""
-            echo "Checking if out directory exists elsewhere:"
-            find . -name "out" -type d 2>/dev/null | head -10 || echo "No 'out' directories found"
-            echo ""
-            echo "=== Final verification ==="
-            echo "Directory exists: NO"
-            echo "This will cause the upload step to fail."
+            echo "Build log tail:"
+            tail -50 build.log || echo "No build log"
+            exit 1
           fi
+          echo "✓ 'out' directory exists"
+          echo ""
+          echo "Checking out directory contents:"
+          ls -la out/ | head -20
+          echo ""
+          file_count=$(find out -type f 2>/dev/null | wc -l || echo "0")
+          echo "Total files in out: $file_count"
+          if [ "$file_count" -eq 0 ]; then
+            echo "✗ ERROR: 'out' directory is empty!"
+            exit 1
+          fi
+          echo "✓ Build output verified successfully"
+
+      - name: Verify build output from workspace root
+        run: |
+          echo "=== Verification from workspace root ==="
+          echo "Current directory: $(pwd)"
+          echo "Workspace root: ${{ github.workspace }}"
+          echo ""
+          if [ ! -d "kohrus-web/out" ]; then
+            echo "✗ ERROR: kohrus-web/out does not exist from workspace root!"
+            echo "Listing kohrus-web directory:"
+            ls -la kohrus-web/ || echo "Cannot list kohrus-web"
+            echo ""
+            echo "Searching for 'out' directories:"
+            find . -name "out" -type d 2>/dev/null | head -10 || echo "No 'out' directories found"
+            exit 1
+          fi
+          echo "✓ kohrus-web/out exists"
+          echo ""
+          echo "Directory contents:"
+          ls -la kohrus-web/out/ | head -20
+          echo ""
+          file_count=$(find kohrus-web/out -type f 2>/dev/null | wc -l || echo "0")
+          echo "Total files: $file_count"
+          if [ "$file_count" -eq 0 ]; then
+            echo "✗ ERROR: kohrus-web/out is empty!"
+            exit 1
+          fi
+          echo "✓ Verification successful"
 
       - name: Copy build output to root
         run: |
           echo "=== Copy build output to root ==="
           echo "Current directory: $(pwd)"
-          echo "Checking if kohrus-web/out exists..."
+          echo ""
           if [ ! -d "kohrus-web/out" ]; then
             echo "✗ ERROR: kohrus-web/out does not exist!"
-            echo "Listing kohrus-web directory:"
-            ls -la kohrus-web/ || echo "Cannot list kohrus-web"
             exit 1
           fi
-          echo "✓ Source directory exists"
-          echo "Removing ./out if it exists..."
+          echo "✓ Source directory confirmed"
+          echo ""
+          echo "Removing existing ./out if present..."
           rm -rf ./out || true
+          echo ""
           echo "Copying kohrus-web/out to ./out..."
           cp -r kohrus-web/out ./out || {
-            echo "✗ Copy failed!"
-            echo "Source directory contents:"
+            echo "✗ Copy command failed!"
+            echo "Source verification:"
             ls -la kohrus-web/out/ | head -10 || echo "Cannot list source"
             exit 1
           }
+          echo ""
           echo "✓ Copy completed"
-          echo "Verifying copy:"
+          echo ""
+          echo "Verifying destination:"
           if [ ! -d "./out" ]; then
             echo "✗ ERROR: ./out was not created!"
             exit 1
           fi
-          ls -la ./out/ | head -10 || echo "Cannot list destination"
+          ls -la ./out/ | head -10
           file_count=$(find ./out -type f 2>/dev/null | wc -l || echo "0")
+          echo ""
           echo "Files in ./out: $file_count"
           if [ "$file_count" -eq 0 ]; then
-            echo "⚠ WARNING: No files found in ./out"
+            echo "✗ ERROR: ./out is empty!"
+            exit 1
           fi
+          echo "✓ Copy verification successful"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
