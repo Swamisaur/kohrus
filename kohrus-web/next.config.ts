@@ -7,12 +7,18 @@ const nextConfig: NextConfig = {
     unoptimized: true,
   },
   trailingSlash: true,
-  eslint: {
-    ignoreDuringBuilds: true,
-  } as any,
   typescript: {
     ignoreBuildErrors: false,
   },
+} as NextConfig & {
+  eslint?: {
+    ignoreDuringBuilds?: boolean;
+  };
+};
+
+// Disable ESLint during builds
+(nextConfig as any).eslint = {
+  ignoreDuringBuilds: true,
 };
 
 export default nextConfig;
