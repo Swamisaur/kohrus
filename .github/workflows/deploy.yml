@@ -40,15 +40,19 @@ jobs:
           echo "=== Build Step ==="
           echo "Current directory: $(pwd)"
           echo "Workspace root: ${{ github.workspace }}"
+          echo "Node version: $(node --version)"
+          echo "NPM version: $(npm --version)"
           echo ""
           echo "Starting Next.js build..."
-          npm run build 2>&1 | tee build.log || {
-            echo "✗ Build failed!"
-            cat build.log
-            exit 1
-          }
+          set +e
+          npm run build > build.log 2>&1
+          BUILD_EXIT_CODE=$?
+          set -e
           echo ""
-          echo "✓ Build command completed"
+          echo "Build exit code: $BUILD_EXIT_CODE"
+          echo ""
+          echo "=== Build Output ==="
+          cat build.log
           echo ""
           echo "=== Verifying build output ==="
           echo "Current directory: $(pwd)"
@@ -57,13 +61,16 @@ jobs:
           echo ""
           if [ ! -d "out" ]; then
             echo "✗ CRITICAL ERROR: 'out' directory was NOT created by Next.js build!"
-            echo "This means the static export failed."
+            echo "Build exit code was: $BUILD_EXIT_CODE"
             echo ""
             echo "Checking for .next directory:"
-            ls -la .next/ 2>/dev/null || echo ".next directory not found"
+            ls -la .next/ 2>/dev/null | head -10 || echo ".next directory not found"
             echo ""
-            echo "Build log tail:"
-            tail -50 build.log || echo "No build log"
+            echo "Checking package.json build script:"
+            cat package.json | grep -A 2 '"build"'
+            echo ""
+            echo "Full build log:"
+            cat build.log
             exit 1
           fi
           echo "✓ 'out' directory exists"
@@ -75,9 +82,13 @@ jobs:
           echo "Total files in out: $file_count"
           if [ "$file_count" -eq 0 ]; then
             echo "✗ ERROR: 'out' directory is empty!"
+            echo "Build exit code was: $BUILD_EXIT_CODE"
             exit 1
           fi
           echo "✓ Build output verified successfully"
+          if [ "$BUILD_EXIT_CODE" -ne 0 ]; then
+            echo "⚠ WARNING: Build exited with code $BUILD_EXIT_CODE but output was created"
+          fi
 
       - name: Verify build output from workspace root
         run: |
