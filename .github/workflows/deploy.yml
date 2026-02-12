@@ -58,7 +58,6 @@ jobs:
 
       - name: Debug - Comprehensive path analysis
         run: |
-          set -e
           echo "=== DEBUG: Path Analysis ==="
           echo "Current working directory: $(pwd)"
           echo "Workspace root: ${{ github.workspace }}"
@@ -69,42 +68,44 @@ jobs:
             echo "✓ Relative path exists"
             ABS_PATH=$(cd kohrus-web/out && pwd)
             echo "Absolute path: $ABS_PATH"
+            echo ""
+            echo "=== File count analysis ==="
+            file_count_all=$(find kohrus-web/out -type f 2>/dev/null | wc -l || echo "0")
+            file_count_visible=$(find kohrus-web/out -type f ! -name '.*' 2>/dev/null | wc -l || echo "0")
+            file_count_hidden=$(find kohrus-web/out -type f -name '.*' 2>/dev/null | wc -l || echo "0")
+            echo "Total files: $file_count_all"
+            echo "Visible files: $file_count_visible"
+            echo "Hidden files: $file_count_hidden"
+            if [ "$file_count_all" -eq 0 ]; then
+              echo "WARNING: No files found!"
+            fi
+            echo ""
+            echo "=== Directory structure ==="
+            echo "Top-level contents:"
+            ls -la kohrus-web/out/ | head -20 || echo "ls failed"
+            echo ""
+            echo "=== Permissions check ==="
+            ls -ld kohrus-web/out || echo "Permission check failed"
+            echo ""
+            echo "=== Size check ==="
+            du -sh kohrus-web/out 2>/dev/null || echo "Could not get size"
+            echo ""
+            echo "=== Final verification ==="
+            echo "Directory exists: YES"
+            echo "Directory is readable: $([ -r "kohrus-web/out" ] && echo 'YES' || echo 'NO')"
+            echo "Directory is executable: $([ -x "kohrus-web/out" ] && echo 'YES' || echo 'NO')"
           else
             echo "✗ Relative path does NOT exist"
             echo "Listing kohrus-web directory:"
-            ls -la kohrus-web/ || true
-            exit 1
+            ls -la kohrus-web/ || echo "Could not list kohrus-web directory"
+            echo ""
+            echo "Checking if out directory exists elsewhere:"
+            find . -name "out" -type d 2>/dev/null | head -10 || echo "No 'out' directories found"
+            echo ""
+            echo "=== Final verification ==="
+            echo "Directory exists: NO"
+            echo "This will cause the upload step to fail."
           fi
-          echo ""
-          echo "=== File count analysis ==="
-          file_count_all=$(find kohrus-web/out -type f 2>/dev/null | wc -l || echo "0")
-          file_count_visible=$(find kohrus-web/out -type f ! -name '.*' 2>/dev/null | wc -l || echo "0")
-          file_count_hidden=$(find kohrus-web/out -type f -name '.*' 2>/dev/null | wc -l || echo "0")
-          echo "Total files: $file_count_all"
-          echo "Visible files: $file_count_visible"
-          echo "Hidden files: $file_count_hidden"
-          if [ "$file_count_all" -eq 0 ]; then
-            echo "WARNING: No files found!"
-          fi
-          echo ""
-          echo "=== Directory structure ==="
-          echo "Top-level contents:"
-          ls -la kohrus-web/out/ | head -20 || echo "ls failed"
-          echo ""
-          echo "=== Permissions check ==="
-          ls -ld kohrus-web/out || echo "Permission check failed"
-          echo ""
-          echo "=== Path format tests ==="
-          echo "Path without trailing slash: kohrus-web/out"
-          echo "Path with trailing slash: kohrus-web/out/"
-          echo ""
-          echo "=== Size check ==="
-          du -sh kohrus-web/out 2>/dev/null || echo "Could not get size"
-          echo ""
-          echo "=== Final verification ==="
-          echo "Directory exists: $([ -d "kohrus-web/out" ] && echo 'YES' || echo 'NO')"
-          echo "Directory is readable: $([ -r "kohrus-web/out" ] && echo 'YES' || echo 'NO')"
-          echo "Directory is executable: $([ -x "kohrus-web/out" ] && echo 'YES' || echo 'NO')"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
