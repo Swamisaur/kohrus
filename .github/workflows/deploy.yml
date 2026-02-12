@@ -58,7 +58,13 @@ jobs:
             exit 1
           fi
           echo "✓ Artifact directory exists"
-          echo "Files in out directory:"
+          file_count=$(find kohrus-web/out -type f | wc -l)
+          echo "Files found: $file_count"
+          if [ "$file_count" -eq 0 ]; then
+            echo "Error: No files found in kohrus-web/out"
+            exit 1
+          fi
+          echo "Sample files:"
           ls -la kohrus-web/out/ | head -10
 
       - name: Setup Pages
@@ -67,7 +73,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: kohrus-web/out
+          path: kohrus-web/out/
 
   deploy:
     environment:
