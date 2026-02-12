@@ -107,13 +107,28 @@ jobs:
             echo "This will cause the upload step to fail."
           fi
 
+      - name: Copy build output to root
+        run: |
+          echo "Copying kohrus-web/out to ./out..."
+          if [ -d "kohrus-web/out" ]; then
+            cp -r kohrus-web/out ./out
+            echo "✓ Copy completed"
+            echo "Verifying copy:"
+            ls -la ./out/ | head -10
+            file_count=$(find ./out -type f 2>/dev/null | wc -l || echo "0")
+            echo "Files in ./out: $file_count"
+          else
+            echo "✗ Source directory kohrus-web/out does not exist"
+            exit 1
+          fi
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: kohrus-web/out
+          path: ./out
 
   deploy:
     environment:
