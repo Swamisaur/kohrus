@@ -109,17 +109,36 @@ jobs:
 
       - name: Copy build output to root
         run: |
-          echo "Copying kohrus-web/out to ./out..."
-          if [ -d "kohrus-web/out" ]; then
-            cp -r kohrus-web/out ./out
-            echo "✓ Copy completed"
-            echo "Verifying copy:"
-            ls -la ./out/ | head -10
-            file_count=$(find ./out -type f 2>/dev/null | wc -l || echo "0")
-            echo "Files in ./out: $file_count"
-          else
-            echo "✗ Source directory kohrus-web/out does not exist"
+          echo "=== Copy build output to root ==="
+          echo "Current directory: $(pwd)"
+          echo "Checking if kohrus-web/out exists..."
+          if [ ! -d "kohrus-web/out" ]; then
+            echo "✗ ERROR: kohrus-web/out does not exist!"
+            echo "Listing kohrus-web directory:"
+            ls -la kohrus-web/ || echo "Cannot list kohrus-web"
             exit 1
+          fi
+          echo "✓ Source directory exists"
+          echo "Removing ./out if it exists..."
+          rm -rf ./out || true
+          echo "Copying kohrus-web/out to ./out..."
+          cp -r kohrus-web/out ./out || {
+            echo "✗ Copy failed!"
+            echo "Source directory contents:"
+            ls -la kohrus-web/out/ | head -10 || echo "Cannot list source"
+            exit 1
+          }
+          echo "✓ Copy completed"
+          echo "Verifying copy:"
+          if [ ! -d "./out" ]; then
+            echo "✗ ERROR: ./out was not created!"
+            exit 1
+          fi
+          ls -la ./out/ | head -10 || echo "Cannot list destination"
+          file_count=$(find ./out -type f 2>/dev/null | wc -l || echo "0")
+          echo "Files in ./out: $file_count"
+          if [ "$file_count" -eq 0 ]; then
+            echo "⚠ WARNING: No files found in ./out"
           fi
 
       - name: Setup Pages
