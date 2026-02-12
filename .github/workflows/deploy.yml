@@ -41,13 +41,18 @@ jobs:
           CI: false
           NEXT_TELEMETRY_DISABLED: 1
 
+      - name: Copy build output to root
+        run: |
+          cp -r kohrus-web/out ./out
+          ls -la out/ | head -10
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./kohrus-web/out
+          path: ./out
 
   deploy:
     environment:
