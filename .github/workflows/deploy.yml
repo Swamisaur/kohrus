@@ -38,6 +38,10 @@ jobs:
         working-directory: ./kohrus-web
         run: npm run build
 
+      - name: Add .nojekyll file
+        working-directory: ./kohrus-web/out
+        run: touch .nojekyll
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
