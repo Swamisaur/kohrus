@@ -50,9 +50,17 @@ jobs:
           NEXT_TELEMETRY_DISABLED: 1
           NODE_OPTIONS: --max-old-space-size=4096
 
-      - name: Add .nojekyll file
-        working-directory: ./kohrus-web/out
-        run: echo "" > .nojekyll && echo ".nojekyll file created"
+      - name: Copy .nojekyll file
+        working-directory: ./kohrus-web
+        run: |
+          if [ -f "public/.nojekyll" ]; then
+            cp public/.nojekyll out/.nojekyll
+            echo ".nojekyll file copied"
+          else
+            touch out/.nojekyll
+            echo ".nojekyll file created"
+          fi
+          ls -la out/.nojekyll
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
