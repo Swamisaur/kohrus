@@ -1,0 +1,1 @@
+self.__SSG_MANIFEST=new Set(["\u002Fasset\u002F[id]","\u002Fowner\u002Fapplications\u002F[id]","\u002Fowner\u002Fartists\u002F[id]","\u002Fowner\u002Fportfolio\u002F[id]\u002Fedit"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()
