@@ -3,17 +3,18 @@ import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, TrendingUp, Music } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 export function generateStaticParams() {
   return [{ id: '1' }, { id: '2' }, { id: '3' }, { id: '4' }];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- params required by Next.js for dynamic route
 export default function AssetDetailPage({ params }: { params: { id: string } }) {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Navigation />
-      <div className="container mx-auto px-6 lg:px-12 py-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-12 py-10">
         <Button variant="ghost" asChild className="mb-6">
           <Link href="/browse">
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -45,7 +46,7 @@ export default function AssetDetailPage({ params }: { params: { id: string } }) 
                 </div>
               </CardContent>
             </Card>
-            <Button asChild className="w-full" size="lg">
+            <Button asChild className="w-full min-h-12 sm:min-h-0" size="lg">
               <Link href="/checkout">
                 Invest Now
               </Link>

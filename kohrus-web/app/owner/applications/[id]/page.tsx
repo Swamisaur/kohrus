@@ -14,11 +14,7 @@ import {
   Phone,
   ExternalLink,
   Music,
-  IndianRupee,
-  ShoppingBag,
-  Tv,
-  FileText,
-  Briefcase
+  IndianRupee
 } from "lucide-react";
 
 export function generateStaticParams() {
@@ -46,7 +42,7 @@ export default function ApplicationReviewPage({ params }: { params: { id: string
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Navigation />
-      <div className="container mx-auto px-6 lg:px-12 py-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-12 py-10">
         <Button variant="ghost" asChild className="mb-6">
           <Link href="/owner/applications">
             <ArrowLeft className="mr-2 h-4 w-4" />

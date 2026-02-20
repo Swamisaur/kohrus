@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { 
   FileText, 
@@ -18,7 +17,7 @@ export default function OwnerDashboardPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Navigation />
-      <div className="container mx-auto px-6 lg:px-12 py-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-12 py-10">
         <div className="mb-8">
           <h1 className="text-2xl lg:text-3xl font-bold mb-2">Platform Owner Dashboard</h1>
           <p className="text-muted-foreground">Manage artist applications and portfolio listings</p>

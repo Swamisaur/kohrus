@@ -5,13 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { ArrowLeft, ArrowRight, IndianRupee, Music } from "lucide-react";
+import { ArrowLeft, ArrowRight, IndianRupee } from "lucide-react";
 
 export default function CreatePortfolioListingPage() {
   return (
     <div className="flex min-h-screen flex-col bg-muted">
       <Navigation />
-      <div className="flex-1 flex items-center justify-center py-10 px-6 lg:px-12">
+      <div className="flex-1 flex items-center justify-center py-10 px-4 sm:px-6 lg:px-12">
         <Card className="w-full max-w-2xl">
           <CardHeader>
             <div className="flex items-center gap-4 mb-2">

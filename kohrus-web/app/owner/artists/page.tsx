@@ -7,9 +7,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { 
   Search, 
   ArrowLeft, 
-  CheckCircle, 
-  Clock, 
-  Music,
   Plus,
   Eye
 } from "lucide-react";
@@ -48,7 +45,7 @@ export default function ApprovedArtistsPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Navigation />
-      <div className="container mx-auto px-6 lg:px-12 py-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-12 py-10">
         <div className="mb-8">
           <Button variant="ghost" asChild className="mb-4">
             <Link href="/owner/dashboard">

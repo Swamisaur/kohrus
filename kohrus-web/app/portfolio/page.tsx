@@ -3,13 +3,13 @@ import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { TrendingUp, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export default function PortfolioPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Navigation />
-      <div className="container mx-auto px-6 lg:px-12 py-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-12 py-10">
         <h1 className="text-2xl lg:text-3xl font-bold mb-8">Portfolio Dashboard</h1>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
           <Card>
