@@ -2,9 +2,7 @@ import Link from "next/link";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { 
   ArrowLeft, 
   Plus, 
@@ -12,8 +10,7 @@ import {
   Eye,
   CheckCircle,
   XCircle,
-  Music,
-  IndianRupee
+  Inbox
 } from "lucide-react";
 
 export default function PortfolioManagementPage() {
@@ -50,7 +47,7 @@ export default function PortfolioManagementPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Navigation />
-      <div className="container mx-auto px-6 lg:px-12 py-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-12 py-10">
         <div className="mb-8">
           <Button variant="ghost" asChild className="mb-4">
             <Link href="/owner/dashboard">
@@ -73,6 +70,21 @@ export default function PortfolioManagementPage() {
         </div>
 
         {/* Listings Grid */}
+        {listings.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16 px-4 text-center border border-dashed border-border rounded-xl bg-muted/30">
+            <Inbox className="h-12 w-12 text-muted-foreground mb-4" aria-hidden />
+            <h2 className="text-lg font-semibold mb-2">No listings yet</h2>
+            <p className="text-muted-foreground max-w-sm mb-6">
+              Create your first listing to make music assets available for investors.
+            </p>
+            <Button asChild>
+              <Link href="/owner/portfolio/new">
+                <Plus className="mr-2 h-4 w-4" />
+                Create New Listing
+              </Link>
+            </Button>
+          </div>
+        ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {listings.map((listing) => (
             <Card key={listing.id} className="hover:shadow-lg transition-shadow">
@@ -127,6 +139,7 @@ export default function PortfolioManagementPage() {
             </Card>
           ))}
         </div>
+        )}
       </div>
       <Footer />
     </div>

@@ -4,7 +4,7 @@ import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { Search, ArrowLeft, Clock, Mail, Phone, ExternalLink } from "lucide-react";
+import { Search, ArrowLeft, Clock, Mail, Phone, ExternalLink, Inbox } from "lucide-react";
 
 export default function PendingApplicationsPage() {
   const applications = [
@@ -46,7 +46,7 @@ export default function PendingApplicationsPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Navigation />
-      <div className="container mx-auto px-6 lg:px-12 py-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-12 py-10">
         <div className="mb-8">
           <Button variant="ghost" asChild className="mb-4">
             <Link href="/owner/dashboard">
@@ -68,6 +68,15 @@ export default function PendingApplicationsPage() {
         </div>
 
         {/* Applications List */}
+        {applications.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16 px-4 text-center border border-dashed border-border rounded-xl bg-muted/30">
+            <Inbox className="h-12 w-12 text-muted-foreground mb-4" aria-hidden />
+            <h2 className="text-lg font-semibold mb-2">No applications yet</h2>
+            <p className="text-muted-foreground max-w-sm">
+              When artists submit interest forms, they&apos;ll appear here.
+            </p>
+          </div>
+        ) : (
         <div className="space-y-4">
           {applications.map((app) => (
             <Card key={app.id} className="hover:shadow-lg transition-shadow">
@@ -126,6 +135,7 @@ export default function PendingApplicationsPage() {
             </Card>
           ))}
         </div>
+        )}
       </div>
       <Footer />
     </div>

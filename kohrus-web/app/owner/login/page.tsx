@@ -11,7 +11,7 @@ export default function OwnerLoginPage() {
   return (
     <div className="flex min-h-screen flex-col bg-muted">
       <Navigation />
-      <div className="flex-1 flex items-center justify-center py-10 px-6 lg:px-12">
+      <div className="flex-1 flex items-center justify-center py-10 px-4 sm:px-6 lg:px-12">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-amber-100">

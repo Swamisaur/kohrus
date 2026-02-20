@@ -3,17 +3,18 @@ import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { ArrowLeft, CheckCircle, Clock, Music } from "lucide-react";
+import { ArrowLeft, CheckCircle, Clock } from "lucide-react";
 
 export function generateStaticParams() {
   return [{ id: '1' }, { id: '2' }, { id: '3' }];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- params required by Next.js for dynamic route
 export default function ArtistDetailPage({ params }: { params: { id: string } }) {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Navigation />
-      <div className="container mx-auto px-6 lg:px-12 py-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-12 py-10">
         <Button variant="ghost" asChild className="mb-6">
           <Link href="/owner/artists">
             <ArrowLeft className="mr-2 h-4 w-4" />
