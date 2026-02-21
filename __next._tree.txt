@@ -9,4 +9,4 @@
 :HL["/kohrus/cta-banner.png","image"]
 :HL["/kohrus/featured-3.png","image"]
 :HL["/kohrus/featured-4.png","image"]
-0:{"buildId":"OccQF-ihzMjimt2XZRNvt","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
+0:{"buildId":"02gyba-3QzxP9F-wqQBMY","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
