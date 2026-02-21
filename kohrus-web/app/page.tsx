@@ -7,6 +7,7 @@ import { ArrowRight, Music, Sparkles, TrendingUp, PieChart, Wallet, RefreshCw, M
 import { LandingFallbackImage } from "@/components/landing-fallback-image";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+const TALLY_FORM_URL = "https://tally.so/r/eq6zdE";
 
 const howItWorksSteps = [
   {
@@ -139,10 +140,10 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
             <Button size="lg" className="gap-2 w-full sm:w-auto" asChild>
-              <Link href="/signup">
+              <a href={TALLY_FORM_URL} target="_blank" rel="noopener noreferrer">
                 Start Investing
                 <ArrowRight className="h-4 w-4" />
-              </Link>
+              </a>
             </Button>
             <Button size="lg" variant="outline" className="gap-2 w-full sm:w-auto" asChild>
               <Link href="/artist/signup">
@@ -402,7 +403,7 @@ export default function Home() {
                   <li className="flex items-center gap-2">· Secondary market—buy and sell 24/7</li>
                 </ul>
                 <Button className="mt-4 gap-2" asChild>
-                  <Link href="/signup">Start investing <ArrowRight className="h-4 w-4" /></Link>
+                  <a href={TALLY_FORM_URL} target="_blank" rel="noopener noreferrer">Start investing <ArrowRight className="h-4 w-4" /></a>
                 </Button>
               </div>
             </div>
@@ -483,10 +484,10 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button size="lg" variant="secondary" className="gap-2 w-full sm:w-auto" asChild>
-                <Link href="/signup">
+                <a href={TALLY_FORM_URL} target="_blank" rel="noopener noreferrer">
                   Create Free Account
                   <ArrowRight className="h-4 w-4" />
-                </Link>
+                </a>
               </Button>
               <Button size="lg" variant="outline" className="border-white/20 bg-white/10 text-white hover:bg-white/20 w-full sm:w-auto" asChild>
                 <Link href="/browse">

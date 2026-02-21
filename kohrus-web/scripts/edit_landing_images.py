@@ -195,6 +195,7 @@ def main():
     only_how_steps = os.environ.get("ONLY_HOW_STEPS", "").strip().lower() in ("1", "true", "yes")
     only_cta_banner = os.environ.get("ONLY_CTA_BANNER", "").strip().lower() in ("1", "true", "yes")
     only_new_sections = os.environ.get("ONLY_NEW_SECTIONS", "").strip().lower() in ("1", "true", "yes")
+    only_who = os.environ.get("ONLY_WHO", "").strip().lower() in ("1", "true", "yes")
     script_dir = os.path.dirname(os.path.abspath(__file__))
     public_dir = os.path.join(script_dir, "..", "public")
     os.makedirs(public_dir, exist_ok=True)
@@ -209,9 +210,11 @@ def main():
         print("Only generating CTA banner...")
     if only_new_sections:
         print("Only generating new section images (hero-bg, why, for-investors/artists)...")
+    if only_who:
+        print("Only generating Who it's for images (for-investors, for-artists)...")
 
     # 1) Hero
-    if not only_how_steps and not only_cta_banner and not only_new_sections:
+    if not only_how_steps and not only_cta_banner and not only_new_sections and not only_who:
         hero_src = os.path.join(cache_dir, "hero-src.jpg")
         if not os.path.isfile(hero_src) and not download(HERO_URL, hero_src):
             print("Skipping hero (download failed).")
@@ -224,7 +227,7 @@ def main():
             time.sleep(5)
 
     # 2) Featured 1–4
-    if not only_how_steps and not only_cta_banner and not only_new_sections:
+    if not only_how_steps and not only_cta_banner and not only_new_sections and not only_who:
         for i, url in enumerate(FEATURED_URLS, start=1):
             src = os.path.join(cache_dir, f"featured-{i}-src.jpg")
             if not os.path.isfile(src) and not download(url, src):
@@ -240,7 +243,7 @@ def main():
                 time.sleep(5)
 
     # 3) How It Works steps 1–3
-    if not only_cta_banner:
+    if not only_cta_banner and not only_who:
         for i, url in enumerate(HOW_IT_WORKS_URLS, start=1):
             src = os.path.join(cache_dir, f"how-step-{i}-src.jpg")
             if not os.path.isfile(src) and not download(url, src):
@@ -256,7 +259,7 @@ def main():
                 time.sleep(5)
 
     # 4) CTA banner (text-to-image)
-    if (not only_how_steps or only_cta_banner) and not only_new_sections:
+    if (not only_how_steps or only_cta_banner) and not only_new_sections and not only_who:
         print("Generating CTA banner...")
         if generate_image(client, CTA_BANNER_PROMPT, os.path.join(public_dir, "cta-banner.png")):
             print("  Saved public/cta-banner.png")
@@ -264,7 +267,19 @@ def main():
             print("  CTA banner generation failed.")
 
     # 5) New section images (hero-bg, why 1–3, for-investors, for-artists)
-    if only_new_sections or (not only_how_steps and not only_cta_banner):
+    if only_who:
+        print("Generating for-investors...")
+        if generate_image(client, FOR_INVESTORS_PROMPT, os.path.join(public_dir, "for-investors.png")):
+            print("  Saved public/for-investors.png")
+        else:
+            print("  for-investors failed.")
+        time.sleep(5)
+        print("Generating for-artists...")
+        if generate_image(client, FOR_ARTISTS_PROMPT, os.path.join(public_dir, "for-artists.png")):
+            print("  Saved public/for-artists.png")
+        else:
+            print("  for-artists failed.")
+    elif only_new_sections or (not only_how_steps and not only_cta_banner):
         if only_new_sections:
             pass  # run only the block below
         else:
