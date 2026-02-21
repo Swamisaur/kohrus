@@ -57,10 +57,10 @@ export function Navigation() {
             className="hidden sm:inline-flex whitespace-nowrap"
             asChild
           >
-            <Link href="/signup">Login</Link>
+            <a href="https://tally.so/r/eq6zdE" target="_blank" rel="noopener noreferrer">Login</a>
           </Button>
           <Button size="sm" className="whitespace-nowrap" asChild>
-            <Link href="/signup">Sign Up</Link>
+            <a href="https://tally.so/r/eq6zdE" target="_blank" rel="noopener noreferrer">Sign Up</a>
           </Button>
           <button
             type="button"
@@ -102,14 +102,14 @@ export function Navigation() {
               ))}
               <div className="mt-4 pt-4 border-t border-border flex flex-col gap-2">
                 <Button variant="outline" className="w-full min-h-12" asChild>
-                  <Link href="/signup" onClick={closeMenu}>
+                  <a href="https://tally.so/r/eq6zdE" target="_blank" rel="noopener noreferrer" onClick={closeMenu}>
                     Login
-                  </Link>
+                  </a>
                 </Button>
                 <Button className="w-full min-h-12" asChild>
-                  <Link href="/signup" onClick={closeMenu}>
+                  <a href="https://tally.so/r/eq6zdE" target="_blank" rel="noopener noreferrer" onClick={closeMenu}>
                     Sign Up
-                  </Link>
+                  </a>
                 </Button>
               </div>
             </div>
